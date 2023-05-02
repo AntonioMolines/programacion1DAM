@@ -3,9 +3,10 @@ package tienDAM;
 import java.util.Scanner;
 
 public class TienDAM {
-
+    static Almacen a = new Almacen(50);
+    static Scanner lector = new Scanner(System.in);
     public static void menuPrincipal() {
-        Scanner lector = new Scanner(System.in);
+        
         int op = 0;
         while(op != 3) {
             System.out.println("Menu de TienDAM: ");
@@ -27,7 +28,6 @@ public class TienDAM {
 
     public static void menuAlmacen() {
         int op = 0;
-        Scanner lector = new Scanner(System.in);
         while(op != 6) {
             System.out.println("Menu del almacen de TienDAM");
             System.out.println("Seleccione una opción:");
@@ -40,20 +40,36 @@ public class TienDAM {
             op = lector.nextInt();
             switch (op) {
                 case 1:
-
+                    verArticulos();
                     break;
                 case 2:
-                
+                    
                     break;
             }
         }
     }
 
+   
+
+
     public static void menuPedido() {
 
     }
-    Almacen a = new Almacen(50);
+
+    public static void verArticulos() {
+        for(int i = 0; i <= a.getIndice(); i++) {
+            System.out.println(a.verArticulo(i).toString());   
+        }
+    }
+
+    public static Articulo buscarArticulos() {
+        System.out.println("Introduzca el nombre del articulo que quiere buscar");
+        String nombre = lector.nextLine();
+        return a.buscarArticulo(nombre);
+    }
+    
     public static void main(String[] args) {
+        
         menuPrincipal();
     }
 }

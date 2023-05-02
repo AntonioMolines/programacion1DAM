@@ -6,6 +6,6 @@ public class Pedido {
     double subTotal;
     double precioFinal;
     int[] IDArticulos;
-    int[] CantidadArticulos;
+    int[] cantidadArticulos;
     int maxArticulos;
 }
