@@ -54,16 +54,15 @@ public class Almacen {
         return articulos.get(indice).setPrecio(p);
     }
 
-    public ArrayList<Integer> buscarArticulo(String n) {
-        int[]pos = new int[maxArticulos];
-        int f = 0;
+    public ArrayList<Articulo> buscarArticulo(String n) {
+        ArrayList<Articulo> artEncontrados= new ArrayList();
+        
         for(int i = 0; i < indice; i++) {
             if(articulos.get(i).getNombre().contains(n)) {
-                pos[f] = i;
-                f++;
+                artEncontrados.add(articulos.get(i));
             }
         }
-        return pos;
+        return artEncontrados;
     }
 
     public boolean recibir(int indice, int c) {
@@ -72,5 +71,13 @@ public class Almacen {
 
     public boolean devolver(int indice, int c) {
         return articulos.get(indice).disminuir(c);
+    }
+
+    public String toString(){
+        String res = "";
+        for (int i = 0; i < articulos.size(); i++) {
+            res += i + "- " + articulos.get(i).toString();
+        }
+        return res;
     }
 }

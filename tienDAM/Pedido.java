@@ -1,11 +1,14 @@
 package tienDAM;
-
+import java.util.ArrayList;
 public class Pedido {
-    String nombre;
-    double porcentDescuento;
-    double subTotal;
-    double precioFinal;
-    int[] IDArticulos;
-    int[] cantidadArticulos;
-    int maxArticulos;
+    private String nombre;
+    private double porcentDescuento;
+    private double subTotal;
+    private double precioFinal;
+    private ArrayList<Articulo> IDarticulos = new ArrayList();
+    private ArrayList<Articulo> articulos = new ArrayList();
+    
+    public Pedido() {
+
+    }
 }
