@@ -1,8 +1,11 @@
 package tienDAM;
 
+import java.net.SocketTimeoutException;
 import java.util.ArrayList;
-
+import java.util.InputMismatchException;
 import java.util.Scanner;
+
+import javax.sql.rowset.serial.SerialException;
 
 public class TienDAM {
     static Almacen a = new Almacen(50);
@@ -16,7 +19,7 @@ public class TienDAM {
             System.out.println("1- Almacen");
             System.out.println("2- Pedido");
             System.out.println("3- Salir");
-            op = lector.nextInt();
+            op = pedirIntValido("opcion elegida: ");
             switch(op) {
                 case 1:
                     menuAlmacen();
@@ -39,7 +42,7 @@ public class TienDAM {
             System.out.println("4- recibir articulos");
             System.out.println("5- Devolver articulos");
             System.out.println("6- volver al menu principal");
-            op = lector.nextInt();
+            op = pedirIntValido("opcion elegida: ");
             switch (op) {
                 case 1:
                     verArticulos();
@@ -76,7 +79,7 @@ public class TienDAM {
             System.out.println("5- Acabar la venta(comprar)");
             System.out.println("6- Rehacer la venta(descartar el carro pero seguir en este menu)");
             System.out.println("7- Volver al menu principal");
-            op = lector.nextInt();
+            op = pedirIntValido("opcion elegida: ");
                 switch (op) {
                     case 1:
                         añadirCarro();
@@ -95,6 +98,26 @@ public class TienDAM {
                         break;
                 }
             }
+
+    }
+    public static int pedirIntValido(String msg) {
+        int res = 0;
+        boolean salida = false;
+        while(!salida) {
+            System.out.println(msg);
+            try {
+                res = lector.nextInt();
+                salida = true;
+            } catch (InputMismatchException e) {
+                System.err.println("Valor no válido.Introduce un entero");
+                lector.nextLine();
+
+            }
+        }
+        return res;
+    }
+
+    public static void añadirCarro() {
 
     }
 
