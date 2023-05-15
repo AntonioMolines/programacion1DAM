@@ -24,15 +24,33 @@ public class Pedido {
         return articulos;
     }
 
-    public boolean eliminarArticulo(Articulo art) {
-        boolean res = false;
+    public ArrayList<Integer> getCantidadAComprar() {
+        return cantidadAComprar;
+    }
+
+    public int getPosArticulo(Articulo art) {
+        int res = -1;
         for(int i = 0; i < articulos.size(); i++) {
             if(art.getNombre() == articulos.get(i).getNombre()) {
                 articulos.remove(i);
                 cantidadAComprar.remove(i);
-                res = true;
+                res = i;
             }
         }
+        return res;
+    }
+
+    public void setCantidadAComprar(int c) {
+        
+    }
+    public boolean eliminarArticulo(Articulo art) {
+        boolean res = false;
+        int pos = getPosArticulo(art);
+            if(pos != -1) {
+                articulos.remove(pos);
+                cantidadAComprar.remove(pos);
+                res = true;
+            }
         return res;
     }
 }

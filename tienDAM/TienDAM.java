@@ -89,7 +89,7 @@ public class TienDAM {
                         eliminarArticulo();
                         break;
                     case 3:
-                        
+                        modificarCantidad();
                         break;
                     case 4:
                         
@@ -146,6 +146,17 @@ public class TienDAM {
 
     public static void eliminarArticulo() {
         p.eliminarArticulo(buscarArticulos("Introduzca el articulo que desa eliminar:"));
+    }
+
+    public static void modificarCantidad() {
+        Articulo art = buscarArticulos("Introduzca el articulo al que quieres modificar la cantidad");
+        if(art != null) {
+            int pos = p.getPosArticulo(art);
+            System.out.println("Actualmente hay " + p.getCantidadAComprar().get(pos));
+            System.out.println("introduzca la nueva cantidad: ");
+            int cantidad = lector.nextInt();
+            
+        }
     }
     public static void verArticulos() {
         for(int i = 0; i <= a.getArticulos().size(); i++) {
