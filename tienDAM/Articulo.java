@@ -5,12 +5,16 @@ public class Articulo {
     private double precio;
     private final double iva;
     private int cantidad;
+    private final int id;
+    private static int contID = 0;
 
     public Articulo(String n,double p, double iva, int c){
         nombre = n;
         precio = p;
         this.iva = iva;
         cantidad = c;
+        id = contID;
+        contID++;
     }
 
     public String getNombre() {
@@ -28,7 +32,9 @@ public class Articulo {
     public int getCantidad() {
         return cantidad;
     }
-
+    public int getID() {
+        return id;
+    }
     public boolean setPrecio(double p) {
         if(p > 0) {
             precio = p;
@@ -57,7 +63,7 @@ public class Articulo {
         cantidad -= c;
         return true;
     }
-
+    
     public String toString() {
         return "El articulo con nombre: " + nombre + " y valor: " + precio + " tiene un IVA del: " + iva + " y hay disponible(s) " + cantidad;
     }

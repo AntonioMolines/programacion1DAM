@@ -8,8 +8,9 @@ import java.util.Scanner;
 import javax.sql.rowset.serial.SerialException;
 
 public class TienDAM {
-    static Almacen a = new Almacen(50);
-    static Scanner lector = new Scanner(System.in);
+    private static Almacen a = new Almacen(50);
+    private static Pedido p = new Pedido("");
+    private static Scanner lector = new Scanner(System.in);
     public static void menuPrincipal() {
         
         int op = 0;
@@ -48,7 +49,7 @@ public class TienDAM {
                     verArticulos();
                     break;
                 case 2:
-                    buscarArticulos();
+                    buscarArticulos("Introduzca el articulo a buscar");
                     break;
                 case 3:
                     añadirArticuloAlmacen();
@@ -69,7 +70,7 @@ public class TienDAM {
 
     public static void menuPedido() {
         int op = 0;
-        while(op != 6) {
+        while(op != 7) {
             System.out.println("Menu para nuevos pedidos");
             System.out.println("Seleccione una opción");
             System.out.println("1- Añadir articulo al carro");
@@ -85,7 +86,7 @@ public class TienDAM {
                         añadirCarro();
                         break;
                     case 2:
-                        
+                        eliminarArticulo();
                         break;
                     case 3:
                         
@@ -117,30 +118,63 @@ public class TienDAM {
         return res;
     }
 
+    public static String pedirStringValido(String msg) {
+        String res = "";
+        boolean salida = false;
+        while(!salida) {
+            System.out.println(msg);
+            try {
+                res = lector.nextLine();
+                salida = true;
+            } catch (InputMismatchException e) {
+                System.err.println("Valor no válido.Introduce un String");
+                lector.nextLine();
+
+            }
+        }
+        return res;
+    }
+
     public static void añadirCarro() {
+        if(p.getNombre() == "") {
+            p.setNombre(pedirStringValido("Introduzca el nombre del comprador:"));
+            lector.nextLine();
+        }
+        p.getArticulos().add(buscarArticulos("Introduzca el nombre del articulo"));
 
     }
 
+    public static void eliminarArticulo() {
+        p.eliminarArticulo(buscarArticulos("Introduzca el articulo que desa eliminar:"));
+    }
     public static void verArticulos() {
-        for(int i = 0; i <= a.getIndice(); i++) {
+        for(int i = 0; i <= a.getArticulos().size(); i++) {
             System.out.println(a.verArticulo(i).toString());   
         }
     }
 
-    public static void buscarArticulos() {
-        System.out.println("Introduzca el nombre del articulo que quiere buscar");
+    public static Articulo buscarArticulos(String msg) {
+        System.out.println(msg);
         String nombre = lector.nextLine();
         ArrayList<Articulo> artEncontrados = new ArrayList();
         artEncontrados = a.buscarArticulo(nombre);
 
         if(artEncontrados.size() == 0){
             System.out.println("No hay articulos que coincidan con la busqueda");
+            
+        }
+        else if(artEncontrados.size() == 1){
+            return artEncontrados.get(0);
         }
         else {
+            System.out.println("Hay más de un articulo con ese nombre, se más especifico. Se han encontrado...");
+
             for(int i = 0; i < artEncontrados.size(); i++) {
-                artEncontrados.get(i).toString();
+                System.out.println(artEncontrados.get(i).toString()); 
             }
         }
+
+        return null;
     }
 
     public static void añadirArticuloAlmacen() {

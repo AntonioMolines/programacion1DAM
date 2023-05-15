@@ -8,18 +8,16 @@ public class Almacen {
     
     private ArrayList<Articulo> articulos;
     private final int maxArticulos;
-    private int indice;
     
 
     public Almacen(int maxA) {
         maxArticulos = maxA;
         articulos = new ArrayList();
-        indice = 0;
         
     }
 
-    public int getIndice() {
-        return indice;
+    public ArrayList<Articulo> getArticulos() {
+        return articulos;
     }
 
     public Articulo verArticulo(int indice) {
@@ -28,9 +26,9 @@ public class Almacen {
     public boolean añadirArticulo(Articulo a) {
         boolean exito = false;
         if(articulos.size() < maxArticulos) {
-            articulos.add(indice, a);
+            articulos.add(a);
             exito = true;
-            indice++;
+       
         }
         return exito;
     }
@@ -42,10 +40,9 @@ public class Almacen {
     
     public boolean quitarArticulo(int indice) {
         boolean exito = false;
-        if(articulos.size() > indice) {
-            exito = true;
+        if(indice >= 0 && articulos.size() > indice) {
             articulos.remove(indice);
-            indice--;
+            exito = true;
         }
         return exito;
     }
@@ -57,7 +54,7 @@ public class Almacen {
     public ArrayList<Articulo> buscarArticulo(String n) {
         ArrayList<Articulo> artEncontrados= new ArrayList();
         
-        for(int i = 0; i < indice; i++) {
+        for(int i = 0; i < articulos.size(); i++) {
             if(articulos.get(i).getNombre().contains(n)) {
                 artEncontrados.add(articulos.get(i));
             }
