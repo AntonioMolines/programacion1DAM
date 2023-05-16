@@ -10,9 +10,25 @@ public class Articulo {
 
     public Articulo(String n,double p, double iva, int c){
         nombre = n;
-        precio = p;
-        this.iva = iva;
-        cantidad = c;
+        if(p < 0) {
+            precio = -p;
+        }
+        else {
+            precio = p;
+        }
+        if(iva < 0) {
+            this.iva = -iva;
+        }
+        else {
+            this.iva = iva;
+        }
+        if(c < 0) {
+            cantidad = -c;
+        }
+        else {
+            cantidad = c;
+        }
+        
         id = contID;
         contID++;
     }
@@ -47,7 +63,7 @@ public class Articulo {
     }
 
     public boolean aumentar(int c) {
-        if(cantidad <= 0) {
+        if(c <= 0) {
             System.out.println("Para aumentar introduzca una cantidad positiva");
             return false;
         }
@@ -56,8 +72,12 @@ public class Articulo {
     }
 
     public boolean disminuir(int c) {
-        if(cantidad <= 0) {
+        if(c <= 0) {
             System.out.println("Para disminuir introduzca una cantidad positiva");
+            return false;
+        }
+        else if(this.cantidad < c) {
+            System.out.println("Cantidad a retirar insuficente. Operacion cancelada");
             return false;
         }
         cantidad -= c;

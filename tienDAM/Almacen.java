@@ -21,7 +21,14 @@ public class Almacen {
     }
 
     public Articulo verArticulo(int indice) {
-        return articulos.get(indice);
+        try {
+            articulos.get(indice);
+            return articulos.get(indice);
+        }
+        catch(IndexOutOfBoundsException e) {
+            return null;
+        }
+        
     }
     public boolean añadirArticulo(Articulo a) {
         boolean exito = false;
@@ -63,11 +70,23 @@ public class Almacen {
     }
 
     public boolean recibir(int indice, int c) {
-        return articulos.get(indice).aumentar(c);
+         try {
+            return articulos.get(indice).aumentar(c);
+            
+        }
+        catch(IndexOutOfBoundsException e) {
+            return false;
+        }
     }
 
     public boolean devolver(int indice, int c) {
-        return articulos.get(indice).disminuir(c);
+        try {
+            return articulos.get(indice).disminuir(c);
+            
+        }
+        catch(IndexOutOfBoundsException e) {
+            return false;
+        }
     }
 
     public String toString(){

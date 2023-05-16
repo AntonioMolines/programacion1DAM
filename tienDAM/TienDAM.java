@@ -38,11 +38,11 @@ public class TienDAM {
             System.out.println("Menu del almacen de TienDAM");
             System.out.println("Seleccione una opción:");
             System.out.println("1- Ver articulos");
-            System.out.println("2- buscar articulos");
-            System.out.println("3- añadir articulos");
-            System.out.println("4- recibir articulos");
+            System.out.println("2- Buscar articulos");
+            System.out.println("3- Añadir articulos");
+            System.out.println("4- Recibir articulos");
             System.out.println("5- Devolver articulos");
-            System.out.println("6- volver al menu principal");
+            System.out.println("6- Volver al menu principal");
             op = pedirIntValido("opcion elegida: ");
             switch (op) {
                 case 1:
@@ -92,11 +92,15 @@ public class TienDAM {
                         modificarCantidad();
                         break;
                     case 4:
-                        
+                        aplicarDescuentos();
                         break;
                     case 5:
-                        
+                        comprar();
                         break;
+                    case 6:
+                        descartar();
+                        break;
+
                 }
             }
 
@@ -115,51 +119,86 @@ public class TienDAM {
 
             }
         }
+        lector.nextLine();
         return res;
     }
 
-    public static String pedirStringValido(String msg) {
-        String res = "";
+    public static double pedirDoubleValido(String msg) {
+        double res = 0.0;
         boolean salida = false;
         while(!salida) {
             System.out.println(msg);
             try {
-                res = lector.nextLine();
+                res = lector.nextDouble();
                 salida = true;
             } catch (InputMismatchException e) {
-                System.err.println("Valor no válido.Introduce un String");
+                System.err.println("Valor no válido.Introduce un Double");
                 lector.nextLine();
 
             }
         }
+        lector.nextLine();
         return res;
     }
-
+    public static void aplicarDescuentos() {
+        int desc = pedirIntValido("Introduzca el porcentaje de descuento");
+        if(desc < 0) {
+            System.out.println("Introduce un valor de descuento positivo");
+        }
+        else if(desc >= 100) {
+            System.out.println("Descuento demasiado alto");
+        }
+        else {
+            p.setPorcentDescuento(desc);
+        }
+    }
     public static void añadirCarro() {
         if(p.getNombre() == "") {
-            p.setNombre(pedirStringValido("Introduzca el nombre del comprador:"));
-            lector.nextLine();
+            System.out.println("Introduzca el nombre del comprador:");
+            String str = lector.nextLine();
+            p.setNombre(str);
         }
         p.getArticulos().add(buscarArticulos("Introduzca el nombre del articulo"));
 
     }
+    public static void comprar() {
+        p.calcularSubtotal();
+        p.calcularPrecioFinal();
+        p.toString();
+        descartar();
+        
+
+    }
+
+    public static void descartar() {
+        //sobreescribe pedido con un nuevo pedido vacio y sin nombre
+        p = new Pedido("");
+    }
 
     public static void eliminarArticulo() {
-        p.eliminarArticulo(buscarArticulos("Introduzca el articulo que desa eliminar:"));
+        try {
+            p.eliminarArticulo(buscarArticulos("Introduzca el articulo que desa eliminar:"));
+        }
+        catch(NullPointerException e) {
+            System.out.println("");
+        }
     }
 
     public static void modificarCantidad() {
         Articulo art = buscarArticulos("Introduzca el articulo al que quieres modificar la cantidad");
         if(art != null) {
             int pos = p.getPosArticulo(art);
-            System.out.println("Actualmente hay " + p.getCantidadAComprar().get(pos));
-            System.out.println("introduzca la nueva cantidad: ");
-            int cantidad = lector.nextInt();
+            System.out.println("Actualmente hay " + p.getCantidadAComprar(pos));
+            int cantidad = pedirIntValido("introduzca la nueva cantidad: ");
+            p.setCantidadAComprar(pos, cantidad);
             
         }
     }
     public static void verArticulos() {
-        for(int i = 0; i <= a.getArticulos().size(); i++) {
+        if(a.getArticulos().size() == 0) {
+            System.out.println("No hay articulos en el almacen");
+        }
+        for(int i = 0; i < a.getArticulos().size(); i++) {
             System.out.println(a.verArticulo(i).toString());   
         }
     }
@@ -175,6 +214,7 @@ public class TienDAM {
             
         }
         else if(artEncontrados.size() == 1){
+            System.out.println(artEncontrados.get(0).toString());
             return artEncontrados.get(0);
         }
         else {
@@ -191,12 +231,9 @@ public class TienDAM {
     public static void añadirArticuloAlmacen() {
         System.out.println("Introduzca el nombre del articulo");
         String n = lector.nextLine();
-        System.out.println("Introduzca el precio del articulo");
-        double p = lector.nextDouble();
-        System.out.println("Introduzca el IVA del articulo");
-        double IVA = lector.nextDouble();
-        System.out.println("Introduzca la cantidad");
-        int c = lector.nextInt();
+        double p = pedirDoubleValido("Introduzca el precio del articulo");
+        double IVA = pedirDoubleValido("Introduzca el IVA del articulo");
+        int c = pedirIntValido("Introduzca la cantidad");
         if(a.añadirArticulo(n, p, IVA, c)) {
             System.out.println("El articulo se ha añadido con éxito");
         }
@@ -206,20 +243,21 @@ public class TienDAM {
     }
     
     public static void recibirArticulo() {
-        System.out.println("Introduzca la posicion del articulo o '-1' si desconoce las posiciones de estos");
-        int pos = lector.nextInt();
+        int pos = pedirIntValido("Introduzca la posicion del articulo o '-1' si desconoce las posiciones de estos");
         if(pos == -1) {
-            a.toString();
+            System.out.println(a.toString());
             recibirArticulo();
         }
         else {
-            System.out.println("Introduzca la cantidad a recibir de " + a.verArticulo(pos).getNombre() + ":");
-            int c = lector.nextInt();
-            if(a.recibir(pos, c)) {
-                System.out.println("Se han recibido los articulos exitosamente");
-            }
-            else {
-                System.out.println("Error al recibir el articulo");
+            if(a.verArticulo(pos) != null) {
+                int c = pedirIntValido("Introduzca la cantidad a recibir de " + a.verArticulo(pos).getNombre() + ":");
+                
+                if(a.recibir(pos, c)) {
+                    System.out.println("Se han recibido los articulos exitosamente");
+                }
+                else {
+                    System.out.println("Error al recibir el articulo");
+                }
             }
 
 
@@ -228,22 +266,22 @@ public class TienDAM {
     }
 
     public static void devolverArticulo() {
-        System.out.println("Introduzca la posicion del articulo o '-1' si desconoce las posiciones de estos");
-        int pos = lector.nextInt();
+        
+        int pos = pedirIntValido("Introduzca la posicion del articulo o '-1' si desconoce las posiciones de estos");
         if(pos == -1) {
-            a.toString();
+            System.out.println( a.toString());   
             devolverArticulo();
         }
         else {
-            System.out.println("Introduzca la cantidad a devolver de " + a.verArticulo(pos).getNombre() + ":");
-            int c = lector.nextInt();
-            if(a.devolver(pos, c)) {
-                System.out.println("Se han devuelto los articulos exitosamente");
+            if(a.verArticulo(pos) != null) {
+                int c = pedirIntValido("Introduzca la cantidad a devolver de " + a.verArticulo(pos).getNombre() + ":");
+                if(a.devolver(pos, c)) {
+                    System.out.println("Se han devuelto los articulos exitosamente");
+                }
+                else {
+                    System.out.println("Error al devolver el articulo");
+                }
             }
-            else {
-                System.out.println("Error al devolver el articulo");
-            }
-
 
         }
 
