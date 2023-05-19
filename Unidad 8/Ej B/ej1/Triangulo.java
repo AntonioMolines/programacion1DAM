@@ -1,7 +1,7 @@
 package ej1;
 public class Triangulo extends Figura {
 
-    double altura;
+    private double altura;
 
     public Triangulo(double base, double altura) {
         this.altura = altura;
