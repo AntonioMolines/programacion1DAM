@@ -2,7 +2,7 @@ package ej1;
 
 public class Figura {
     
-    double distancia;
+    protected double distancia;
 
     public double area() {
         return 0;
